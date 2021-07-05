@@ -1,0 +1,77 @@
+<div>
+<form>
+  <div class="form-group form-inline">
+    Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+
+  <ng-template #markAsPaid let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-paid-title">Marchează taxa ca fiind plătită</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Ești sigur că dorești să marchezi această taxă ca fiind plătită?</strong></p>
+      <p><span class="text-danger">Această operațiune nu poate fi anulată.</span></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Anulare</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(); markFeeAsPaid()">Da</button>
+    </div>
+  </ng-template>
+
+  <ng-template #deleteFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-delete-title">Ștergere Taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Ești sigur că dorești să ștergi această taxă?</strong></p>
+      <p>Toate informațiile asociate cu aceasta vor fi șterse definitiv.
+        <span class="text-danger">Această operațiune nu poate fi anulată.</span></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Anulare</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(); deleteAccountActiveFee()">Da</button>
+    </div>
+  </ng-template>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Denumire</th>
+    <th>Detalii</th>
+    <th>Comentariu</th>
+    <th>Data limită</th>
+    <th>Valoare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fee of activeFees$ | async">
+    <td class="align-middle">{{fee.name}}</td>
+    <td class="align-middle">{{fee.details}}</td>
+    <td class="align-middle">{{fee.comment}}</td>
+    <td class="align-middle">{{getDate(fee.limitDate)}}</td>
+    <td class="align-middle">{{fee.value}} RON</td>
+    <td class="align-middle">
+      <div class="dropdown">
+        <button class="btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-ellipsis-h" style="color: dodgerblue"></i>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" (click)="open(markAsPaid); setSelectedActiveFee(fee)">Marchează ca plătită</a>
+          <a class="dropdown-item" (click)="open(deleteFee); setId(fee.id)">Șterge</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+  </div>
+</div>

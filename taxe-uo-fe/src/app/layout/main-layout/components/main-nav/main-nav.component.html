@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand navbar-dark bg-primary">
+  <div class="container-fluid">
+
+      <span style="margin-right: 1%;">
+        <img src="/assets/images/logo-uo.png">
+      </span>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav">
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.STUDENT">
+          <a class="nav-link" [routerLink]="['/student/studii-active']">Studii active</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.STUDENT">
+          <a class="nav-link" [routerLink]="['/student/taxe-active']">Taxe active</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.STUDENT">
+          <a class="nav-link" [routerLink]="['/student/taxe-platite']">Taxe plătite</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.TAX_OFFICE">
+          <a class="nav-link" [routerLink]="['/birou-taxe/studenti']">Studenți</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.TAX_OFFICE">
+          <a class="nav-link" [routerLink]="['/birou-taxe/taxe-limita']">Taxe limită</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.TAX_OFFICE">
+          <a class="nav-link" [routerLink]="['/birou-taxe/taxe-restante']">Taxe restante</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.ADMIN">
+          <a class="nav-link" [routerLink]="['/administrator/conturi']">Conturi</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]="'active'" *ngIf="user.role === userRole.ADMIN">
+          <a class="nav-link" [routerLink]="['/administrator/studii']">Studii</a>
+        </li>
+        <li class="nav-item dropdown" [routerLinkActive]="'active'" *ngIf="user.role === userRole.ADMIN">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Taxe</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" [routerLink]="['/administrator/taxe-studiu']">Taxe studiu</a>
+            <a class="dropdown-item" [routerLink]="['/administrator/taxe-camin']">Taxe cămin</a>
+            <a class="dropdown-item" [routerLink]="['/administrator/alte-taxe']">Alte taxe</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <span style="margin-left: 5%;margin-right: 4%">{{ user.firstName }} {{ user.lastName }}</span>
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" [routerLink]="['/user/profil']">Profil</a>
+        <a class="dropdown-item" (click)="logout()">Delogare</a>
+      </div>
+    </div>
+  </div>
+</nav>

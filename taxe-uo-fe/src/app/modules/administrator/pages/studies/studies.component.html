@@ -1,0 +1,144 @@
+<div class="center-table">
+  <div class="row" style=" margin-top: 1%;margin-left: 1%">
+    <div class="col-md-6">
+      <form>
+        <div class="form-group form-inline">
+        Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6" style="text-align: right">
+      <button type="button" class="btn add-button" (click)="open(addStudy)">
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+  <ng-template #addStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-add-title">Adăugare Studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="studyForm">
+        <label>Ciclu<span style="color: red">*</span></label>
+        <select class="form-control" formControlName="cycle">
+          <option></option>
+          <option>licenta</option>
+          <option>master</option>
+          <option>postuniversitar</option>
+          <option>doctorat</option>
+        </select>
+        <div *ngIf="studyForm.value.cycle">
+          <label style="margin-top: 2%">Facultate<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="faculty" placeholder="Facultate">
+          <label style="margin-top: 2%">Departament<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="department" placeholder="Departament">
+          <label style="margin-top: 2%">Program<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="studyProgram" placeholder="Program">
+          <label style="margin-top: 2%">Forma<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="form" placeholder="Forma">
+          <label style="margin-top: 2%">An<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="year" placeholder="An">
+          <label style="margin-top: 2%">Prescurtare<span style="color: red">*</span></label>
+          <input class="form-control" formControlName="abbreviation" placeholder="Prescurtare">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="studyForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); createStudy(studyForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #editStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-edit-title">Editare Studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="studyForm">
+        <label>Ciclu</label>
+        <select class="form-control" formControlName="cycle">
+          <option>licenta</option>
+          <option>master</option>
+          <option>postuniversitar</option>
+          <option>doctorat</option>
+        </select>
+        <label style="margin-top: 2%">Facultate</label>
+        <input class="form-control" formControlName="faculty" placeholder="Facultate">
+        <label style="margin-top: 2%">Departament</label>
+        <input class="form-control" formControlName="department" placeholder="Departament">
+        <label style="margin-top: 2%">Program</label>
+        <input class="form-control" formControlName="studyProgram" placeholder="Program">
+        <label style="margin-top: 2%">Forma</label>
+        <input class="form-control" formControlName="form" placeholder="Forma">
+        <label style="margin-top: 2%">An</label>
+        <input class="form-control" formControlName="year" placeholder="An">
+        <label style="margin-top: 2%">Prescurtare</label>
+        <input class="form-control" formControlName="abbreviation" placeholder="Prescurtare">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="studyForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); updateStudy(studyForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #deleteStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-delete-title">Ștergere Studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Ești sigur că dorești să ștergi acest studiu?</strong></p>
+      <p>Toate informațiile asociate cu acesta vor fi șterse definitiv.
+        <span class="text-danger">Această operațiune nu poate fi anulată.</span></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Anulare</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(); deleteStudyById()">Da</button>
+    </div>
+  </ng-template>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Ciclu</th>
+    <th>Facultate</th>
+    <th>Departament</th>
+    <th>Program</th>
+    <th>Forma</th>
+    <th>An</th>
+    <th>Prescurtare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let study of filteredStudies$ | async">
+    <td class="align-middle">{{study.cycle}}</td>
+    <td class="align-middle">{{study.faculty}}</td>
+    <td class="align-middle">{{study.department}}</td>
+    <td class="align-middle">{{study.studyProgram}}</td>
+    <td class="align-middle">{{study.form}}</td>
+    <td class="align-middle">{{study.year}}</td>
+    <td class="align-middle">{{study.abbreviation}}</td>
+    <td>
+      <div class="dropdown">
+        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-ellipsis-h" style="color: dodgerblue"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="open(editStudy); setId(study.id); setForm(study)">Editează</a>
+          <a class="dropdown-item" (click)="open(deleteStudy); setId(study.id)">Șterge</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>

@@ -1,0 +1,30 @@
+<div class="center-table">
+<form style="margin-top: 1%; margin-left: 1%">
+  <div class="form-group form-inline">
+    Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Denumire</th>
+    <th>Detalii</th>
+    <th>Comentariu</th>
+    <th>Data limită</th>
+    <th>Valoare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fee of filteredActiveFees$ | async">
+    <td class="align-middle">{{fee.name}}</td>
+    <td class="align-middle">{{fee.details}}</td>
+    <td class="align-middle">{{fee.comment}}</td>
+    <td class="align-middle">{{getDate(fee.limitDate)}}</td>
+    <td class="align-middle">{{fee.value}} RON</td>
+    <td class="align-middle"><button type="button" class="btn btn-primary" (click)="makePayment(fee)">Plătește</button></td>
+  </tr>
+  </tbody>
+</table>
+</div>

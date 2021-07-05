@@ -1,0 +1,38 @@
+<div>
+<form style="margin-top: 1%; margin-left: 1%">
+  <div class="form-group form-inline">
+    Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Facultate</th>
+    <th>Ciclu</th>
+    <th>Departament</th>
+    <th>Program de studiu</th>
+    <th>Forma</th>
+    <th>Anul</th>
+    <th>Prescurtare</th>
+    <th>Bugetar</th>
+    <th>Cazat</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let study of activeStudies$ | async">
+    <td class="align-middle">{{study.faculty}}</td>
+    <td class="align-middle">{{study.cycle}}</td>
+    <td class="align-middle">{{study.department}}</td>
+    <td class="align-middle">{{study.studyProgram}}</td>
+    <td class="align-middle">{{study.form}}</td>
+    <td class="align-middle">{{study.year}}</td>
+    <td class="align-middle">{{study.abbreviation}}</td>
+    <td class="align-middle"><i *ngIf="study.budget" class="fa fa-check"></i></td>
+    <td class="align-middle">{{study.accommodated}}</td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+</div>

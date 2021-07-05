@@ -1,0 +1,61 @@
+<div>
+  <ng-template #changePassword let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-change-title">Schimbare parolă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="accountForm">
+        <label style="margin-top: 2%">Parolă nouă<span style="color: red">*</span></label>
+        <input type="password" class="form-control" formControlName="newPassword" placeholder="Parolă nouă">
+        <label style="margin-top: 2%">Repetare parolă nouă<span style="color: red">*</span></label>
+        <input type="password" class="form-control" formControlName="secondNewPassword" placeholder="Repetare parolă nouă">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="accountForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); changeAccountPassword(accountForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+</div>
+
+<div style="width: 40%; margin-top: 10%; margin-left: 30%">
+  <div class="card">
+    <div class="card-body">
+      <div>
+          <h4>Profil</h4>
+          <hr>
+      </div>
+        <div>
+            <div class="row" style="text-align: center">
+              <label class="col-md-6 col-form-label">Nume</label>
+              <div class="col-md-6">
+                <p>{{account.lastName}}</p>
+              </div>
+            </div>
+            <div class="row" style="text-align: center">
+              <label class="col-md-6 col-form-label">Prenume</label>
+              <div class="col-md-6">
+                <p>{{account.firstName}}</p>
+              </div>
+            </div>
+            <div class="row" style="text-align: center">
+              <label class="col-md-6 col-form-label">Email</label>
+              <div class="col-md-6">
+                <p>{{account.email}}</p>
+              </div>
+            </div>
+            <div class="row" style="text-align: center">
+              <label class="col-md-6 col-form-label">Telefon</label>
+              <div class="col-md-6">
+                <p>{{account.phone}}</p>
+              </div>
+            </div>
+          <div style="text-align: center; margin-top: 3%">
+            <button type="button" class="btn btn-primary" (click)="open(changePassword)">Schimbă parola</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

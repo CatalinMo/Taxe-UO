@@ -1,0 +1,21 @@
+table{
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+th:not(:first-child) {
+  text-align: center;
+}
+
+td:not(:first-child) {
+  text-align: center;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 400px;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+}

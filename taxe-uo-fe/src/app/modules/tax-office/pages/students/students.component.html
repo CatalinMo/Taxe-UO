@@ -1,0 +1,243 @@
+<div class="center-table">
+  <div class="row" style=" margin-top: 1%;margin-left: 1%">
+    <div class="col-md-3">
+      <form>
+        <div class="form-group">
+          Caută: <input class="form-control" type="text" [formControl]="filter"/>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form>
+        <div class="form-group">
+          Ciclu:
+          <select class="form-control" [formControl]="cycle">
+            <option></option>
+            <option>licenta</option>
+            <option>master</option>
+            <option>postuniversitar</option>
+            <option>doctorat</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form>
+        <div class="form-group">
+          Studiu:
+          <select class="form-control" [formControl]="study">
+            <option></option>
+            <option *ngFor="let study of filteredStudies$ | async">{{study.abbreviation}}</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="this.ids.length" class="col-md-3 dropdown" style="text-align: right">
+      <button type="button" class="btn btn-primary" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Atribuie taxă</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" (click)="open(assignStudyFee, true); setAreMultipleAccounts(true)">Taxă studiu</a>
+        <a class="dropdown-item" (click)="open(assignHostelFee, true); setAreMultipleAccounts(true)">Taxă cămin</a>
+        <a class="dropdown-item" (click)="open(assignOtherFees, true); setAreMultipleAccounts(true)">Alte taxe</a>
+        <a class="dropdown-item" (click)="open(assignDisciplineRecoveryFee, false); setAreMultipleAccounts(true)">Taxă refacere/parcurgere disciplină</a>
+        <a class="dropdown-item" (click)="open(assignNewFee, false); setAreMultipleAccounts(true)">Taxă nouă</a>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #assignStudyFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-assign-study-fee-title">Atribuie taxă studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <app-assign-study-fees></app-assign-study-fees>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Anulare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #assignHostelFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-assign-hostel-fee-title">Atribuie taxă cămin</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <app-assign-hostel-fees></app-assign-hostel-fees>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Anulare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #assignDisciplineRecoveryFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-assign-discipline-recovery-fee-title">Atribuie taxă refacere/parcurgere disciplină</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="disciplineRecoveryFeesForm">
+        <label>Nume Taxă<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="name" placeholder="Nume">
+        <label>Disciplină<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="discipline" placeholder="Disciplină">
+        <label style="margin-top: 2%">Taxa anuală<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="annualFee" placeholder="Taxa anuala">
+        <label style="margin-top: 2%">Credite disciplină<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="disciplineCredits" placeholder="Credite disciplina">
+        <label style="margin-top: 2%">Data limită<span style="color: red">*</span></label>
+        <input type="date" class="form-control" formControlName="limitDate" placeholder="Data limită">
+        <label style="margin-top: 2%">Comentariu</label>
+        <textarea class="form-control" formControlName="comment" placeholder="Comentariu"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="disciplineRecoveryFeesForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); assignDisciplineRecoveryFeeToAccount(disciplineRecoveryFeesForm.value)">Atribuie</button>
+    </div>
+  </ng-template>
+
+  <ng-template #assignNewFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-add-title">Adăugare Taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="newFeesForm">
+        <label style="margin-top: 2%">Denumire<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="name" placeholder="Taxa">
+        <label style="margin-top: 2%">Valoare<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="value" placeholder="Valoare">
+        <label style="margin-top: 2%">Data limită<span style="color: red">*</span></label>
+        <input type="date" class="form-control" formControlName="limitDate" placeholder="Data limită">
+        <label style="margin-top: 2%">Comentariu</label>
+        <textarea class="form-control" formControlName="comment" placeholder="Comentariu"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="newFeesForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); assignNewFeeToAccount(newFeesForm.value)">Atribuie</button>
+    </div>
+  </ng-template>
+
+  <ng-template #assignOtherFees let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-assign-other-fees-title">Atribuie alte taxe</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <app-assign-other-fees></app-assign-other-fees>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Anulare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #activeStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-active-study-title">Studii active student</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-active-study-ss></app-active-study-ss>
+    </div>
+  </ng-template>
+
+  <ng-template #activeFees let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-active-fees-title">Taxe active student</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <app-active-fees></app-active-fees>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Închidere</button>
+    </div>
+  </ng-template>
+
+  <ng-template #paidFees let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-paid-fees-title">Taxe plătite student</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <app-paid-fees></app-paid-fees>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Închidere</button>
+    </div>
+  </ng-template>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th><input type="checkbox" [checked]="ids.length" (change)="allSelectionsChanges()"></th>
+    <th>Nume</th>
+    <th>Prenume</th>
+    <th>CNP</th>
+    <th>Email</th>
+    <th>Telefon</th>
+    <th>Studii Active</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let account of filteredAccounts$ | async">
+    <td class="align-middle"><input type="checkbox" [value]="account.id" (change)="onCheckboxChange($event)"></td>
+    <td class="align-middle">{{account.lastName}}</td>
+    <td class="align-middle">{{account.firstName}}</td>
+    <td class="align-middle">{{account.cnp}}</td>
+    <td class="align-middle">{{account.email}}</td>
+    <td class="align-middle">{{account.phone}}</td>
+    <td class="align-middle">
+      <p  *ngFor="let studiu of account.activeStudies">{{studiu.abbreviation}}</p>
+    </td>
+    <td>
+      <div class="dropdown">
+        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-ellipsis-h" style="color: dodgerblue"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="open(activeStudy, true); setAccount(account)">Studii active</a>
+          <a class="dropdown-item" (click)="open(activeFees, true); setAccount(account); setAccountId(account.id); setAccountRequest(account)">Taxe active</a>
+          <a class="dropdown-item" (click)="open(paidFees, true); setAccount(account)">Taxe plătite</a>
+          <a class="dropdown-item" id="dropdownSubMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Atribuie taxă</a>
+            <div class="dropdown-menu" aria-labelledby="dropdownSubMenu" style="background: lightskyblue">
+              <a class="dropdown-item" (click)="open(assignStudyFee, true); setAccountId(account.id); setAccountRequest(account); setAreMultipleAccounts(false)">Taxă studiu</a>
+              <a class="dropdown-item" (click)="open(assignHostelFee, true); setAccountId(account.id); setAccountRequest(account); setAreMultipleAccounts(false)">Taxă cămin</a>
+              <a class="dropdown-item" (click)="open(assignOtherFees, true); setAccountId(account.id); setAccountRequest(account); setAreMultipleAccounts(false)">Alte taxe</a>
+              <a class="dropdown-item" (click)="open(assignDisciplineRecoveryFee, false); setAccountId(account.id); setAccountRequest(account); setAreMultipleAccounts(false)">Taxă refacere/parcurgere disciplină</a>
+              <a class="dropdown-item" (click)="open(assignNewFee, false); setAccountId(account.id); setAccountRequest(account); setAreMultipleAccounts(false)">Taxă nouă</a>
+            </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>

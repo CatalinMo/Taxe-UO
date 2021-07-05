@@ -1,0 +1,13 @@
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.uo.taxes.UoTaxesApplication'
+    }
+}
+
+dependencies {
+    implementation project(':uo-taxes-api')
+    runtime project(':uo-taxes-impl')
+    implementation project(':security-api')
+    runtime project(':security-impl')
+
+}

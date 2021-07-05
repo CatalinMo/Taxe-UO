@@ -1,0 +1,52 @@
+<div>
+  <form>
+    <div class="form-group form-inline">
+      Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+    </div>
+  </form>
+
+  <ng-template #assignFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-assign-title">Atribuie taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="otherFeeForm">
+        <label style="margin-top: 2%">Data limită<span style="color: red">*</span></label>
+        <input type="date" class="form-control" formControlName="limitDate" placeholder="Facultate">
+        <label style="margin-top: 2%">Comentariu</label>
+        <textarea class="form-control" formControlName="comment" placeholder="Comentariu"></textarea>
+        <label style="margin-top: 2%">Reducere</label>
+        <input class="form-control" formControlName="discount" placeholder="Reducere %">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="otherFeeForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); assignOtherFeeToAccount(otherFeeForm.value)">Atribuie</button>
+    </div>
+  </ng-template>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Denumire</th>
+        <th>Tip</th>
+        <th>Valoare</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let fee of filteredOtherFees$ | async">
+        <td class="align-middle">{{fee.name}}</td>
+        <td class="align-middle">{{fee.type}}</td>
+        <td class="align-middle">{{fee.value}} RON</td>
+        <td>
+          <button type="button" class="btn btn-primary" (click)="open(assignFee); setSelectedOtherFee(fee)">Atribuie</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

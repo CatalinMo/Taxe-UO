@@ -1,0 +1,80 @@
+<div class="center-table">
+<form style="margin-top: 1%; margin-left: 1%">
+  <div class="form-group form-inline">
+    Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+
+  <ng-template #studentContact let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-contact-title">Date Contact</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Email: {{selectedActiveFee.account.email}}</p>
+      <p>Telefon: {{selectedActiveFee.account.phone}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Închidere</button>
+    </div>
+  </ng-template>
+
+  <ng-template #addComment let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-comment-title">Comentariu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <label>Comentariu</label>
+        <textarea class="form-control" placeholder="Comentariu" [formControl]="comment"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close(); updateActiveFee(comment.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Nume</th>
+    <th>Prenume</th>
+    <th>CNP</th>
+    <th>Denumire</th>
+    <th>Detalii</th>
+    <th>Comentariu</th>
+    <th>Data limită</th>
+    <th>Valoare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fee of filteredLimitFees$ | async">
+    <td class="align-middle">{{fee.account.lastName}}</td>
+    <td class="align-middle">{{fee.account.firstName}}</td>
+    <td class="align-middle">{{fee.account.cnp}}</td>
+    <td class="align-middle">{{fee.name}}</td>
+    <td class="align-middle">{{fee.details}}</td>
+    <td class="align-middle">{{fee.comment}}</td>
+    <td class="align-middle">{{getDate(fee.limitDate)}}</td>
+    <td class="align-middle">{{fee.value}} RON</td>
+    <td>
+      <div class="dropdown">
+        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-ellipsis-h" style="color: dodgerblue"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="open(studentContact); setSelectedActiveFee(fee)">Date contact</a>
+          <a class="dropdown-item" (click)="open(addComment); setSelectedActiveFee(fee); setForm(fee)">Comentariu</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>

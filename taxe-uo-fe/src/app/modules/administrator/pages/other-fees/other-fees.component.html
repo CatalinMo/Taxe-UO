@@ -1,0 +1,117 @@
+<div class="center-table">
+  <div class="row" style=" margin-top: 1%;margin-left: 1%">
+    <div class="col-md-6">
+      <form>
+        <div class="form-group form-inline">
+        Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6" style="text-align: right">
+      <button type="button" class="btn add-button" (click)="open(addFee)">
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+  <ng-template #addFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-add-title">Adăugare Taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="otherFeesForm">
+        <label>Tip</label>
+        <select class="form-control" formControlName="type">
+          <option></option>
+          <option>lunara</option>
+          <option>semestriala</option>
+          <option>anuala</option>
+        </select>
+        <label style="margin-top: 2%">Denumire<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="name" placeholder="Taxa">
+        <label style="margin-top: 2%">Valoare<span style="color: red">*</span></label>
+        <input class="form-control" formControlName="value" placeholder="Valoare">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="otherFeesForm.invalid" type="button" class="btn btn-outline-primary" (click)="modal.close(); addOtherFee(otherFeesForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #editFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-edit-title">Editare Taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="otherFeesForm">
+        <label>Tip</label>
+        <select class="form-control" formControlName="type">
+          <option></option>
+          <option>lunara</option>
+          <option>semestriala</option>
+          <option>anuala</option>
+        </select>
+        <label style="margin-top: 2%">Denumire</label>
+        <input class="form-control" formControlName="name" placeholder="Taxa">
+        <label style="margin-top: 2%">Valoare</label>
+        <input class="form-control" formControlName="value" placeholder="Valoare">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close(); updateOtherFee(otherFeesForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+  <ng-template #deleteFee let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-delete-title">Ștergere Taxă</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Ești sigur că dorești să ștergi această taxă?</strong></p>
+      <p>Toate informațiile asociate cu această taxă vor fi șterse definitiv.
+        <span class="text-danger">Această operațiune nu poate fi anulată.</span></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Anulare</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(); deleteOtherFeeById()">Da</button>
+    </div>
+  </ng-template>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Denumire</th>
+    <th>Tip</th>
+    <th>Valoare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fee of filteredOtherFees$ | async">
+    <td class="align-middle">{{fee.name}}</td>
+    <td class="align-middle">{{fee.type}}</td>
+    <td class="align-middle">{{fee.value}} RON</td>
+    <td>
+      <div class="dropdown">
+        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-ellipsis-h" style="color: dodgerblue"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="open(editFee); setId(fee.id); setForm(fee)">Editează</a>
+          <a class="dropdown-item" (click)="open(deleteFee);  setId(fee.id)">Șterge</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>

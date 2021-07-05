@@ -1,0 +1,57 @@
+<div>
+<form style="margin-top: 1%; margin-left: 1%">
+  <div class="form-group form-inline">
+    Caută: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+
+  <ng-template #deleteStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-delete-title">Ștergere Studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Ești sigur că dorești să ștergi acest studiu?</strong></p>
+      <p><span class="text-danger">Această operațiune nu poate fi anulată.</span></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Anulare</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(); deleteStudyFromAccount()">Da</button>
+    </div>
+  </ng-template>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Facultate</th>
+    <th>Ciclu</th>
+    <th>Departament</th>
+    <th>Program de studiu</th>
+    <th>Forma</th>
+    <th>Anul</th>
+    <th>Prescurtare</th>
+    <th>Bugetar</th>
+    <th>Cazat</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let study of activeStudies$ | async">
+    <td class="align-middle">{{study.faculty}}</td>
+    <td class="align-middle">{{study.cycle}}</td>
+    <td class="align-middle">{{study.department}}</td>
+    <td class="align-middle">{{study.studyProgram}}</td>
+    <td class="align-middle">{{study.form}}</td>
+    <td class="align-middle">{{study.year}}</td>
+    <td class="align-middle">{{study.abbreviation}}</td>
+    <td class="align-middle"><i *ngIf="study.budget" class="fa fa-check"></i></td>
+    <td class="align-middle">{{study.accommodated}}</td>
+    <td class="align-middle" style="text-align: right"><button type="button" class="btn btn-primary" (click)="open(deleteStudy); setId(study.id)">Șterge</button></td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div>
+  <div class="row">
+    <div class="col-md-6">
+      <form>
+        <div class="form-group">
+          Caută: <input class="form-control" type="text" [formControl]="filter"/>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <form>
+        <div class="form-group">
+          Ciclu:
+          <select class="form-control" [formControl]="cycle">
+            <option>licenta</option>
+            <option>master</option>
+            <option>postuniversitar</option>
+            <option>doctorat</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-template #addStudy let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-add-title">Adaugă Studiu</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="studyForm">
+        <label style="margin-top: 2%">Cămin</label>
+        <select class="form-control" formControlName="hostel">
+          <option></option>
+          <option>C1</option>
+          <option>C2</option>
+          <option>C3</option>
+          <option>C4</option>
+        </select>
+        <div style="margin-top: 3%">
+          <label class="form-check-label" style="margin-right: 7%">Buget</label>
+          <input class="form-check-input" type="checkbox" formControlName="budget"/>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.close(); addStudyToAccount(studyForm.value)">Salvare</button>
+    </div>
+  </ng-template>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Ciclu</th>
+    <th>Facultate</th>
+    <th>Departament</th>
+    <th>Program</th>
+    <th>Forma</th>
+    <th>An</th>
+    <th>Prescurtare</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let study of filteredStudies$ | async">
+    <td class="align-middle">{{study.cycle}}</td>
+    <td class="align-middle">{{study.faculty}}</td>
+    <td class="align-middle">{{study.department}}</td>
+    <td class="align-middle">{{study.studyProgram}}</td>
+    <td class="align-middle">{{study.form}}</td>
+    <td class="align-middle">{{study.year}}</td>
+    <td class="align-middle">{{study.abbreviation}}</td>
+    <td class="align-middle" style="text-align: right"><button type="button" class="btn btn-primary" (click)="open(addStudy); setSelectedStudy(study)">Adaugă</button></td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+</div>

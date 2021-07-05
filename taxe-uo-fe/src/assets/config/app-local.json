@@ -1,0 +1,11 @@
+{
+    "name": "local",
+    "badgeColor": "",
+    "authorization": {
+        "localAuthorizationKey": "secretTokenForLocalEnvironment",
+        "authorizationKey": "Authorization"
+    },
+    "server": {
+        "host": "http://localhost:8000/"
+    }
+}

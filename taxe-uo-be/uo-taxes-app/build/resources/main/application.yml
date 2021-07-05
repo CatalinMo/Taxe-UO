@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: uo-taxes
+  profiles:
+    active: local
+  main:
+    allow-bean-definition-overriding: true

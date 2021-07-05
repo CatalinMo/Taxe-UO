@@ -1,0 +1,25 @@
+table{
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+th:not(:first-child) {
+  text-align: center;
+}
+
+td:not(:first-child) {
+  text-align: center;
+}
+
+th:first-child {
+  width: 1%;
+}
+
+td:first-child {
+  width: 1%;
+}
+
+.center-table {
+  width: 80%;
+  margin: 0 auto;
+}
